@@ -1,8 +1,12 @@
-# Mortgage LOS Project Presentation
+# Mortgage Loan Process Flows
 
 ## Project Name
 
 Digital Mortgage Loan Origination & Applicant Tracking System
+
+## Document Type
+
+Business Process Flow Document
 
 ## Domain
 
@@ -10,400 +14,240 @@ Banking / Mortgage / Financial Services
 
 ---
 
-# Slide 1: Project Title
+## 1. Purpose
 
-## Digital Mortgage Loan Origination & Applicant Tracking System
+This document explains the major business process flows for the Mortgage Loan Origination System enhancement.
 
-**Role:** Business Analyst
-**Domain:** Banking / Mortgage / Financial Services
-**Project Type:** Web Application Enhancement + API Integration + Workflow Automation
-**Experience Level:** 5+ Years
+The process flows help business stakeholders, product owners, development teams, QA teams, and UAT users understand how borrowers, loan officers, underwriters, compliance users, and operations managers interact with the system.
 
 ---
 
-# Slide 2: Project Overview
+## 2. High-Level End-to-End Mortgage Application Flow
 
-The project focused on enhancing an existing Mortgage Loan Origination System to improve the borrower application experience and internal loan review workflow.
-
-The enhanced system allows borrowers to submit mortgage applications online, upload required documents, track loan status, and receive automated notifications.
-
-Internal teams such as loan officers, underwriters, compliance users, and operations managers can review applications, update statuses, track audit history, and monitor loan pipeline reports.
-
----
-
-# Slide 3: Business Problem
-
-The existing mortgage application process had several manual steps and limited visibility.
-
-## Key Problems
-
-* Borrowers had limited visibility into loan application status.
-* Loan officers manually followed up for missing documents.
-* Underwriters did not have a centralized application review workflow.
-* Application status updates were delayed.
-* Managers lacked real-time loan pipeline reporting.
-* Audit trail was not consistent for compliance tracking.
-* Reporting required manual data extraction and spreadsheet updates.
-
----
-
-# Slide 4: Business Objectives
-
-## Main Objectives
-
-* Enable borrowers to submit mortgage applications online.
-* Allow borrowers to upload required mortgage documents.
-* Provide real-time loan application status tracking.
-* Allow loan officers to review applications and request missing documents.
-* Allow underwriters to approve, reject, or request additional information.
-* Send automated email notifications for status changes.
-* Maintain audit trail for compliance.
-* Provide dashboard reports for operations managers.
+```mermaid
+flowchart TD
+    A[Borrower Registers / Logs In] --> B[Starts Mortgage Application]
+    B --> C[Enters Personal Details]
+    C --> D[Enters Employment and Income Details]
+    D --> E[Enters Property and Loan Details]
+    E --> F[Uploads Required Documents]
+    F --> G[Submits Application]
+    G --> H[System Generates Application ID]
+    H --> I[Loan Officer Reviews Application]
+    I --> J{Application Complete?}
+    J -->|No| K[Request Missing Documents]
+    K --> L[Borrower Uploads Missing Documents]
+    L --> I
+    J -->|Yes| M[Move to Underwriting]
+    M --> N[Underwriter Reviews Application]
+    N --> O{Underwriter Decision}
+    O -->|Approved| P[Application Approved]
+    O -->|Rejected| Q[Application Rejected]
+    O -->|More Info Needed| R[Request Additional Information]
+    R --> S[Borrower Provides Additional Info]
+    S --> N
+    P --> T[Notify Borrower]
+    Q --> T
+    T --> U[Update Dashboard]
+    U --> V[Capture Audit Trail]
+```
 
 ---
 
-# Slide 5: Stakeholders
+## 3. Borrower Application Submission Flow
 
-| Stakeholder        | Responsibility                                        |
-| ------------------ | ----------------------------------------------------- |
-| Borrower           | Submits mortgage application and uploads documents    |
-| Loan Officer       | Reviews application completeness and borrower details |
-| Underwriter        | Reviews loan risk and makes decision                  |
-| Compliance Team    | Reviews audit and regulatory requirements             |
-| Operations Manager | Monitors loan pipeline and SLA metrics                |
-| Product Owner      | Owns business priorities and backlog                  |
-| Business Analyst   | Documents requirements, process flows, UAT, RTM       |
-| Development Team   | Builds application features and APIs                  |
-| QA Team            | Tests functional, API, regression, and UAT scenarios  |
-
----
-
-# Slide 6: Scope
-
-## In Scope
-
-* Borrower registration and login
-* Mortgage loan application submission
-* Employment, income, property, and loan details capture
-* Required document upload
-* Loan officer review workflow
-* Underwriter decision workflow
-* Borrower status tracking
-* Automated notifications
-* Audit trail
-* Manager dashboard
-* API requirements
-* Data mapping
-* UAT test cases
-* Requirement traceability matrix
-
-## Out of Scope
-
-* Credit bureau integration
-* Payment processing
-* Loan closing document generation
-* Mobile application development
-* AI-based underwriting
-* Third-party title or appraisal vendor integration
+```mermaid
+flowchart TD
+    A[Borrower Logs In] --> B[Click New Loan Application]
+    B --> C[Enter Personal Details]
+    C --> D[Enter Employment Details]
+    D --> E[Enter Income Details]
+    E --> F[Enter Property Details]
+    F --> G[Enter Loan Details]
+    G --> H[Upload Required Documents]
+    H --> I{All Mandatory Fields Completed?}
+    I -->|No| J[Show Validation Errors]
+    J --> C
+    I -->|Yes| K[Submit Application]
+    K --> L[Generate Application ID]
+    L --> M[Set Status as Submitted]
+    M --> N[Send Confirmation Email]
+    N --> O[Display Application in Borrower Dashboard]
+```
 
 ---
 
-# Slide 7: Current State vs Future State
+## 4. Document Upload Flow
 
-| Current State                                 | Future State                       |
-| --------------------------------------------- | ---------------------------------- |
-| Manual loan application follow-ups            | Online application submission      |
-| Documents tracked through emails/spreadsheets | Centralized document upload        |
-| Limited borrower status visibility            | Real-time borrower status tracking |
-| Manual status updates                         | Automated status workflow          |
-| Limited dashboard reporting                   | Loan pipeline dashboard            |
-| Weak audit tracking                           | Complete audit trail               |
-| Manual UAT validation                         | Requirement-based UAT coverage     |
-
----
-
-# Slide 8: High-Level Process Flow
-
-## End-to-End Mortgage Application Flow
-
-1. Borrower registers or logs in.
-2. Borrower starts mortgage loan application.
-3. Borrower enters personal, employment, income, property, and loan details.
-4. Borrower uploads required documents.
-5. Borrower submits application.
-6. System generates application ID.
-7. Loan officer reviews application.
-8. Loan officer requests missing documents or moves application to underwriting.
-9. Underwriter reviews application.
-10. Underwriter approves, rejects, or requests additional information.
-11. System notifies borrower.
-12. Dashboard and audit trail are updated.
+```mermaid
+flowchart TD
+    A[Borrower Opens Document Upload Page] --> B[Select Document Type]
+    B --> C[Choose File]
+    C --> D{File Format Valid?}
+    D -->|No| E[Show Unsupported File Error]
+    E --> C
+    D -->|Yes| F{File Size <= 10 MB?}
+    F -->|No| G[Show File Size Error]
+    G --> C
+    F -->|Yes| H[Upload Document]
+    H --> I[Set Document Status as Submitted]
+    I --> J{All Required Documents Uploaded?}
+    J -->|No| K[Show Pending Documents]
+    J -->|Yes| L[Allow Application Submission]
+```
 
 ---
 
-# Slide 9: Key Business Requirements
+## 5. Loan Officer Review Flow
 
-| Requirement ID | Requirement                                                     |
-| -------------- | --------------------------------------------------------------- |
-| BR-001         | Borrower registration and secure login                          |
-| BR-002         | Online mortgage loan application submission                     |
-| BR-004         | Required document upload                                        |
-| BR-007         | Loan officer application review                                 |
-| BR-009         | Underwriter approval, rejection, or additional document request |
-| BR-010         | Borrower application status tracking                            |
-| BR-011         | Automated email notifications                                   |
-| BR-012         | Audit history for status updates and decisions                  |
-| BR-013         | Loan pipeline dashboard                                         |
-| BR-015         | Role-based access control                                       |
-
----
-
-# Slide 10: Functional Features
-
-## Borrower Features
-
-* Register and log in
-* Create mortgage application
-* Save application as draft
-* Submit final application
-* Upload documents
-* Track application status
-* Receive status notifications
-
-## Internal User Features
-
-* Loan officer review dashboard
-* Missing document request
-* Move application to underwriting
-* Underwriter decision workflow
-* Manager dashboard
-* Audit trail search
-* Role-based access
+```mermaid
+flowchart TD
+    A[Loan Officer Logs In] --> B[Open Submitted Applications Queue]
+    B --> C[Select Application]
+    C --> D[Review Borrower Details]
+    D --> E[Review Employment and Income Details]
+    E --> F[Review Property and Loan Details]
+    F --> G[Review Uploaded Documents]
+    G --> H{Application Complete?}
+    H -->|No| I[Request Missing Documents]
+    I --> J[Add Comments]
+    J --> K[Update Status to Pending Documents]
+    K --> L[Notify Borrower]
+    L --> M[Capture Audit Trail]
+    H -->|Yes| N[Move Application to Underwriting]
+    N --> O[Update Status to Underwriting]
+    O --> P[Notify Borrower]
+    P --> Q[Capture Audit Trail]
+```
 
 ---
 
-# Slide 11: User Stories
+## 6. Underwriter Decision Flow
 
-## Sample User Story 1
-
-**As a** borrower,
-**I want to** submit a mortgage loan application online,
-**So that** I can apply for a home loan without visiting a branch.
-
-## Acceptance Criteria
-
-* Borrower can enter required personal, income, employment, property, and loan details.
-* Mandatory fields are validated.
-* Application ID is generated after successful submission.
-* Application status is set to Submitted.
-* Borrower receives confirmation notification.
-
----
-
-# Slide 12: Wireframes Covered
-
-The project included wireframe requirements for the following screens:
-
-* Borrower Registration Page
-* Borrower Login Page
-* Borrower Dashboard
-* Mortgage Application Form
-* Document Upload Page
-* Application Status Tracking Page
-* Loan Officer Review Dashboard
-* Loan Officer Application Review Page
-* Underwriter Queue Page
-* Underwriter Decision Page
-* Operations Manager Dashboard
-* Audit Trail Page
+```mermaid
+flowchart TD
+    A[Underwriter Logs In] --> B[Open Underwriting Queue]
+    B --> C[Select Application]
+    C --> D[Review Application Details]
+    D --> E[Review Income and Employment]
+    E --> F[Review Property and Loan Details]
+    F --> G[Review Uploaded Documents]
+    G --> H[Add Review Comments]
+    H --> I{Decision}
+    I -->|Approve| J[Approve Application]
+    J --> K[Update Status to Approved]
+    K --> L[Notify Borrower]
+    L --> M[Update Manager Dashboard]
+    M --> N[Capture Audit Trail]
+    I -->|Reject| O[Enter Mandatory Rejection Comments]
+    O --> P[Reject Application]
+    P --> Q[Update Status to Rejected]
+    Q --> R[Notify Borrower]
+    R --> S[Update Manager Dashboard]
+    S --> T[Capture Audit Trail]
+    I -->|Need More Info| U[Request Additional Information]
+    U --> V[Update Status to Additional Info Required]
+    V --> W[Notify Borrower]
+    W --> X[Capture Audit Trail]
+```
 
 ---
 
-# Slide 13: API Requirements
+## 7. Borrower Status Tracking Flow
 
-## Key APIs Documented
-
-| API ID  | API Name                      | Method |
-| ------- | ----------------------------- | ------ |
-| API-001 | Borrower Registration API     | POST   |
-| API-002 | Borrower Login API            | POST   |
-| API-003 | Create Loan Application API   | POST   |
-| API-004 | Get Loan Application API      | GET    |
-| API-005 | Upload Document API           | POST   |
-| API-006 | Update Application Status API | PUT    |
-| API-010 | Get Manager Dashboard API     | GET    |
-| API-011 | Get Audit Trail API           | GET    |
-
-## BA Contribution
-
-* Documented request and response fields.
-* Defined business rules.
-* Captured error scenarios.
-* Clarified API behavior with development and QA teams.
-* Supported Postman and Swagger review discussions.
+```mermaid
+flowchart TD
+    A[Borrower Logs In] --> B[Open Application Dashboard]
+    B --> C[View Submitted Applications]
+    C --> D[Select Application]
+    D --> E[View Current Status]
+    E --> F[View Submitted Date and Application ID]
+    F --> G{Action Required?}
+    G -->|No| H[Continue Tracking Status]
+    G -->|Yes| I[Upload Missing Documents or Additional Info]
+    I --> J[System Updates Application]
+    J --> K[Notify Internal User]
+```
 
 ---
 
-# Slide 14: Data Mapping
+## 8. Notification Flow
 
-## Data Mapping Areas
-
-* Borrower registration data
-* Loan application data
-* Document upload data
-* Application status data
-* Dashboard reporting data
-* Notification data
-* Audit trail data
-
-## Purpose
-
-The data mapping document helped ensure that data captured from the borrower portal was correctly stored in the LOS database, passed to underwriting systems, displayed on dashboards, and captured in audit logs.
+```mermaid
+flowchart TD
+    A[Application Status Change Occurs] --> B[System Identifies New Status]
+    B --> C{Notification Required?}
+    C -->|No| D[No Email Sent]
+    C -->|Yes| E[Generate Email Template]
+    E --> F[Include Application ID and Status]
+    F --> G[Send Email to Borrower]
+    G --> H[Log Notification Event]
+    H --> I[Capture Audit Trail]
+```
 
 ---
 
-# Slide 15: SQL Validation
+## 9. Manager Dashboard Flow
 
-SQL queries were used to support data validation, reporting verification, and UAT.
-
-## Sample Validation Areas
-
-* Borrower profile validation
-* Loan application submission validation
-* Document upload validation
-* Application status validation
-* Underwriting queue validation
-* Dashboard count validation
-* Audit trail validation
-* Notification validation
-* Data quality checks
-
----
-
-# Slide 16: UAT Approach
-
-## UAT Scope
-
-* Borrower registration and login
-* Mortgage application submission
-* Document upload
-* Loan officer review
-* Missing document request
-* Underwriter decision workflow
-* Borrower status tracking
-* Email notifications
-* Manager dashboard
-* Audit trail
-* Role-based access
-
-## UAT Goal
-
-To confirm that the system meets business requirements and supports real business workflows before production release.
+```mermaid
+flowchart TD
+    A[Operations Manager Logs In] --> B[Open Loan Pipeline Dashboard]
+    B --> C[System Fetches Application Data]
+    C --> D[Display Total Applications]
+    D --> E[Display Applications by Status]
+    E --> F[Display Pending Documents]
+    F --> G[Display Approved and Rejected Counts]
+    G --> H[Display SLA Aging]
+    H --> I{Filter Required?}
+    I -->|Yes| J[Apply Date / Status Filter]
+    J --> C
+    I -->|No| K[View Dashboard Summary]
+```
 
 ---
 
-# Slide 17: RTM Coverage
+## 10. Audit Trail Flow
 
-The Requirement Traceability Matrix mapped:
-
-* Business requirements
-* Functional requirements
-* User stories
-* API requirements
-* UAT test cases
-* Coverage status
-
-## Coverage Summary
-
-| Area                    | Covered |
-| ----------------------- | ------: |
-| Business Requirements   | 15 / 15 |
-| Functional Requirements | 25 / 25 |
-| User Stories            | 21 / 21 |
-| API Requirements        | 11 / 11 |
-| UAT Test Cases          | 24 / 24 |
+```mermaid
+flowchart TD
+    A[User Performs Action] --> B[System Identifies Action Type]
+    B --> C[Capture Application ID]
+    C --> D[Capture User ID and Role]
+    D --> E[Capture Old Value]
+    E --> F[Capture New Value]
+    F --> G[Capture Timestamp]
+    G --> H[Capture Comments if Available]
+    H --> I[Save Audit Record]
+    I --> J[Audit Trail Available for Compliance Review]
+```
 
 ---
 
-# Slide 18: Risks and Mitigation
+## 11. Key Status Transition Flow
 
-| Risk                                       | Impact | Mitigation                                     |
-| ------------------------------------------ | ------ | ---------------------------------------------- |
-| Delay in finalizing document checklist     | High   | Schedule review with compliance team           |
-| Underwriting workflow complexity           | High   | Conduct detailed walkthrough with underwriters |
-| Dashboard data mismatch                    | Medium | Validate using SQL queries                     |
-| Limited business user availability for UAT | Medium | Plan UAT schedule early                        |
-| API error scenario gaps                    | Medium | Review with technical lead and QA              |
-
----
-
-# Slide 19: BA Responsibilities
-
-As a Business Analyst, responsibilities included:
-
-* Requirement gathering with business stakeholders.
-* Created BRD and FRD.
-* Created user stories and acceptance criteria.
-* Documented process flows and wireframe requirements.
-* Created API requirements and data mapping documents.
-* Prepared SQL validation queries.
-* Created UAT test cases.
-* Maintained RTM.
-* Supported sprint planning, backlog grooming, and sprint reviews.
-* Supported QA and UAT defect triage.
-* Coordinated with product owner, developers, QA, compliance, loan officers, and underwriters.
+| Current Status | Action | New Status | Performed By |
+|---|---|---|---|
+| Draft | Submit Application | Submitted | Borrower |
+| Submitted | Start Review | In Review | Loan Officer |
+| In Review | Request Missing Documents | Pending Documents | Loan Officer |
+| Pending Documents | Upload Missing Documents | Submitted | Borrower |
+| In Review | Move to Underwriting | Underwriting | Loan Officer |
+| Underwriting | Approve Application | Approved | Underwriter |
+| Underwriting | Reject Application | Rejected | Underwriter |
+| Underwriting | Request More Info | Additional Info Required | Underwriter |
+| Additional Info Required | Submit Additional Info | Underwriting | Borrower |
+| Submitted | Withdraw Application | Withdrawn | Borrower |
 
 ---
 
-# Slide 20: Business Impact
+## 12. BA Notes
 
-## Expected Benefits
+As a Business Analyst, these process flows help in:
 
-* Reduced manual follow-ups between borrowers and loan officers.
-* Improved borrower experience through online status tracking.
-* Faster document review and underwriting workflow.
-* Better visibility into loan application pipeline.
-* Improved compliance through audit trail.
-* Reduced application processing delays.
-* Better reporting for operations managers.
-* Improved requirement traceability and UAT coverage.
-
----
-
-# Slide 21: Interview Explanation
-
-One of my recent projects was a Mortgage Loan Origination System enhancement. The goal was to improve the digital mortgage application process for borrowers and internal teams such as loan officers, underwriters, compliance, and operations.
-
-As a Business Analyst, I worked on gathering requirements, documenting BRD and FRD, creating user stories with acceptance criteria, preparing process flows, wireframe requirements, API requirements, data mapping, SQL validation queries, UAT test cases, and RTM.
-
-The major enhancement areas were online loan application submission, document upload, underwriting decision workflow, borrower status tracking, automated notifications, audit trail, and manager dashboard reporting.
-
-I worked closely with product owners, loan officers, underwriters, QA, developers, and compliance teams to clarify requirements, validate business rules, and support UAT sign-off.
-
----
-
-# Slide 22: Project Artifacts
-
-The project repository includes:
-
-* Project Overview
-* Business Requirements Document
-* Functional Requirements Document
-* User Stories and Acceptance Criteria
-* Process Flows
-* Wireframes
-* API Requirements Document
-* Data Mapping Document
-* SQL Queries
-* UAT Test Cases
-* Requirement Traceability Matrix
-* Weekly Status Report
-* Final Presentation
-
----
-
-# Slide 23: Final Summary
-
-This project demonstrates end-to-end Business Analyst responsibilities for a 5+ year BA profile in the banking and mortgage domain.
-
-It covers requirement gathering, business analysis, functional documentation, Agile user stories, API understanding, data mapping, SQL validation, UAT preparation, RTM, stakeholder communication, and project reporting.
+- Explaining current and future state workflows.
+- Reviewing business logic with stakeholders.
+- Helping developers understand expected system behavior.
+- Helping QA teams design test scenarios.
+- Identifying gaps in status transitions.
+- Supporting UAT preparation.
+- Maintaining requirement traceability.
